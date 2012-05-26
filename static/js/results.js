@@ -31,7 +31,7 @@
 	  // todo
 	});
 
-	var app_url = 'http://' + window.location.host + '/mobile',
+	var app_url = window.location.protocol + '//' + window.location.host + '/mobile',
 	  enc_url = encodeURI(app_url);
 
 	// set URL for user
