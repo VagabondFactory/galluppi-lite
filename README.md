@@ -1,7 +1,7 @@
 Galluppi
 ========
 
-Really simple (yes/no) gallup implementation with node.js, socket.io, express, underscore, bootstap.io, and Google charts.
+Really simple (yes/no) gallup implementation with node.js, socket.io, express, underscore, Twitter bootstap, and Google charts.
 
 How To
 ======
