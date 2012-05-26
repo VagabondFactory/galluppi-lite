@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gallup Vastaukset</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/static/css/gallup.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Gallup | Vastaukset</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="hero-unit qrcode-unit">
+        <p class="url"></p>
+        <div class="qrcode"></div>
+      </div>
+
+      <div class="row">
+        <div class="span12">
+          <h2>Gallup Vastaukset</h2>
+          <p>&nbsp;</p>
+        </div>
+      </div>
+
+      <div class="results"></div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; Gallup Company 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+
+      (function($) {
+
+        var server = window.location.origin;
+
+        var socket = io.connect(server);
+
+        socket.on('result', function (data) {
+          
+          if(! $('#q-'+data.id).length ) {
+            // xss escape
+            var question = $('<div/>').text(data.q).html(),
+              id = $('<div/>').text(data.id).html();
+
+            var row = '<div class="row"><div class="span12"><h3>'+question+'</h3><div id="q-'+id+'"></div></div></div>';
+
+            $('.results').prepend(row);
+
+            drawChart(data);
+          } else {
+            drawChart(data);
+          }
+
+        });
+
+        socket.on('connect', function (data) {
+          // todo
+        });
+
+        socket.on('disconnect', function (data) {
+          // todo
+        });
+
+        var app_url = window.location.origin + '/mobile',
+          enc_url = encodeURI(app_url);
+
+        // set URL for user
+        $('.url').text(app_url);
+
+        // generate QR Code
+        $('<img/>', {
+            src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=H|2&ch1='+enc_url,
+            alt: 'QR Code',
+        }).appendTo('.qrcode');
+
+        // --- google charts part
+
+        google.load("visualization", "1", {packages:["corechart"]});
+
+        function drawChart(obj) {
+
+          var obj = obj || {};
+
+          var data = google.visualization.arrayToDataTable([
+            ['Vastaus', 'Kylla tai Ei'],
+            ['Kylla', obj.y],
+            ['Ei', obj.n]
+          ]);
+
+          var options = { colors:['green','red'], width: 340, height: 340, legend: { position: 'none' } };
+
+          var chart = new google.visualization.PieChart(document.getElementById('q-'+obj.id));
+          chart.draw(data, options);
+        }
+
+      })(jQuery);
+
+    </script>
+
+  </body>
+</html>

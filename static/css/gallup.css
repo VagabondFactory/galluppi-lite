@@ -1,0 +1,11 @@
+
+h2 { color:#0E246B; }
+.hero-unit p { font-weight: bold; }
+.qrcode-unit { width:310px;position:absolute;right:20px; }
+.qrcode-unit { font-weight:bold; }
+.results { min-height:300px; }
+.question-unit p { margin-bottom:2em; }
+.question-unit form, .answer-unit form { text-align:center;margin-bottom:0; }
+.question-unit input[type="text"] { padding: 9px 9px;width:100%;box-sizing:border-box;height:37px; }
+.question-unit .btn { float:none;margin-left:0;width:100%; }
+.answer-unit .btn { float:none;display:inline-block;width:45%; }
