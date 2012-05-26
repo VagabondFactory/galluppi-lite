@@ -39,7 +39,7 @@
 
 	// generate QR Code
 	$('<img/>', {
-	    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=H|2&ch1='+enc_url,
+	    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=L|2&ch1='+enc_url,
 	    alt: 'QR Code',
 	}).appendTo('.qrcode');
 
