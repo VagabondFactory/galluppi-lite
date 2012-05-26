@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Gallup Vastaaja</title>
+    <title>Galluppi | Vastaaja</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="">
@@ -24,7 +24,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">Gallup | Vastaaja</a>
+          <a class="brand" href="#">Galluppi | Vastaaja</a>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="container">
       
       <div class="hero-unit message">
-        <p>Liitytään Gallup palveluun...</p>
+        <p>Liitytään Galluppi palveluun...</p>
       </div>
 
       <div class="hero-unit answer-unit answer" style="display:none;">
@@ -46,77 +46,14 @@
       <hr>
 
       <footer>
-        <p>&copy; Gallup Company 2012</p>
+        <p>&copy; Galluppi Company 2012</p>
       </footer>
 
-    </div> <!-- /container -->
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript">
-
-      (function($) {
-
-        var server = window.location.origin;
-
-        var socket = io.connect(server);
-
-        socket.on('question', function (data) {
-
-          var data = data || {};
-
-          var $question = $('.answer');
-          $question.attr('id', data.id);
-          $question.find('p').text(data.q);
-
-          $('.message').fadeOut(function() {
-            $question.fadeIn();
-          });
-
-        });
-
-        socket.on('connect', function (data) {
-          $('.message p').text('Odotetaan kysymystä...');
-        });
-
-        socket.on('disconnect', function (data) {
-          $('.message p').text('Virhe! Yhteys Gallup palveluun katkesi');
-          $('.hero-unit').fadeOut(function() { 
-            $('.message').fadeIn();
-          });
-        });
-
-        $('.btn').on('click tap', function(event) {
-          event.preventDefault();
-
-          var $tgt = $(event.target);
-
-          var val = $tgt.attr('id'),
-            a = val == 'yes' ? 1 : 0;
-          
-          var $question = $('.answer'),
-            id = $question.attr('id');
-
-          var answer = { 'id': id, 'a': a };
-
-          socket.emit('answer', answer);
-
-          $('.hero-unit').fadeOut(function() { 
-          $('.message p').text('Kiitos vastauksestasi!')
-          $('.message').fadeIn();
-          setTimeout(function() {
-            $('.message p').text('Odotetaan kysymystä...');
-          }, 4000);
-
-        });
-
-        });
-
-      })(jQuery);
-
-    </script>
-
+    <script src="/static/js/mobile.js"></script>
   </body>
 </html>

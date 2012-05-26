@@ -3,7 +3,7 @@ Galluppi
 
 Really simple (yes/no) gallup implementation with node.js, socket.io, express, underscore, bootstap.io, and Google charts.
 
-HOW TO
+How To
 ======
 
 1. Install node.js (https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
