@@ -38,8 +38,9 @@
 	$('.url').text(app_url);
 
 	// generate QR Code
+	// https://developers.google.com/chart/infographics/docs/qr_codes
 	$('<img/>', {
-	    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=H|2&chl='+enc_url,
+	    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=Q|2&chl='+enc_url,
 	    alt: 'QR Code',
 	}).appendTo('.qrcode');
 
