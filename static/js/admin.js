@@ -1,7 +1,9 @@
 
 (function($) {
 
-	var server = window.location.origin;
+	"use strict";
+
+	var server = window.location.protocol + '//' + window.location.host;
 
 	var socket = io.connect(server);
 
@@ -17,7 +19,7 @@
 	  event.preventDefault();
 
 	  var $text = $('input[type="text"]'),
-	    txt = $text.val();
+	    txt = $text.val().trim();
 
 	  if(txt.length) {
 

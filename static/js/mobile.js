@@ -1,21 +1,32 @@
 
 (function($) {
 
-	var server = window.location.origin;
+	"use strict";
 
-	var socket = io.connect(server);
+	var server = window.location.protocol + '//' + window.location.host;
+
+	var socket = io.connect(server),
+		questions = '',
+	    txt = '';
 
 	socket.on('question', function (data) {
 
 	  var data = data || {};
 
-	  var $question = $('.answer');
-	  $question.attr('id', data.id);
-	  $question.find('p').text(data.q);
+	  txt = data.q.replace(/\?$/, ' ');
 
-	  $('.message').fadeOut(function() {
-	    $question.fadeIn();
-	  });
+	  var regex = new RegExp(txt,"gi");
+
+	  if(! questions.match(regex)) {
+		var $question = $('.answer');
+		$question.attr('id', data.id);
+		$question.find('p').text(data.q);
+
+		$('.message').fadeOut(function() {
+			$question.fadeIn();
+		});
+
+	  }
 
 	});
 
@@ -37,7 +48,7 @@
 
 	  var val = $tgt.attr('id'),
 	    a = val == 'yes' ? 1 : 0;
-	  
+
 	  var $question = $('.answer'),
 	    id = $question.attr('id');
 
@@ -45,12 +56,15 @@
 
 	  socket.emit('answer', answer);
 
+	  questions += txt;
+
 	  $('.hero-unit').fadeOut(function() { 
-	  $('.message p').text('Kiitos vastauksestasi!')
-	  $('.message').fadeIn();
-	  setTimeout(function() {
-	    $('.message p').text('Odotetaan kysymystä...');
-	  }, 4000);
+		  $('.message p').text('Kiitos vastauksestasi!');
+		  $('.message').fadeIn();
+
+		  setTimeout(function() {
+		    $('.message p').text('Odotetaan kysymystä...');
+		  }, 4000);
 
 	});
 

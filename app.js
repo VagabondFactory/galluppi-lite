@@ -42,18 +42,15 @@
 
   app.listen(8080,
   function() {
-      console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+      console.log('Express server listening on port %d in %s mode', app.address().port, app.settings.env);
   });
 
   var questions = [],
     qid = 0;
 
-  io.sockets.on('connection',
-  function(socket) {
-    socket.on('answer',
-    function(data) {
-        var question = _.find(questions,
-        function(question) {
+  io.sockets.on('connection', function(socket) {
+    socket.on('answer', function(data) {
+        var question = _.find(questions, function(question) {
             return question.id == data.id;
         });
 
@@ -69,25 +66,33 @@
         }
     });
 
-    socket.on('question',
-    function(data) {
+    socket.on('question', function(data) {
+
+      var question = _.find(questions, function(question) {
+            return question.q == data.q;
+      });
+
+      if(question) {
+        data.id = question.id;
+      } else {
         // add new question id
         data.id = qid++;
         // make question obj
         var question = { 'id': data.id, 'q': data.q, 'y': 0, 'n': 0 };
         // save obj
         questions.push(question);
-        // send to mobiles
-        socket.broadcast.emit('question', data);
+      }
+
+      // send to mobiles
+      socket.broadcast.emit('question', data);
+
     });
 
-    socket.on('connect',
-    function() {
+    socket.on('connect', function() {
         // socket.broadcast.emit('user connected');
     });
 
-    socket.on('disconnect',
-    function() {
+    socket.on('disconnect', function() {
         // socket.broadcast.emit('user disconnected');
     });
 

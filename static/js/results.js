@@ -1,14 +1,16 @@
 
 (function($) {
 
-	var server = window.location.origin;
+	"use strict";
+	
+	var server = window.location.protocol + '//' + window.location.host;
 
 	var socket = io.connect(server);
 
 	socket.on('result', function (data) {
 	  
 	  if(! $('#q-'+data.id).length ) {
-	    // xss escape
+	    // xss cleaning
 	    var question = $('<div/>').text(data.q).html(),
 	      id = $('<div/>').text(data.id).html();
 
@@ -32,17 +34,24 @@
 	});
 
 	var app_url = window.location.protocol + '//' + window.location.host + '/mobile',
-	  enc_url = encodeURI(app_url);
+		url = "https://www.googleapis.com/urlshortener/v1/url",
+  		params = JSON.stringify({ "longUrl": app_url, "key": "AIzaSyBdhX1T_3kNk8WFXNzTpnBshi6vg3GKlWU" });
 
-	// set URL for user
-	$('.url').text(app_url);
+	var jqxhr = $.ajax(url, { type:"POST", contentType: "application/json", data: params });
 
-	// generate QR Code
-	// https://developers.google.com/chart/infographics/docs/qr_codes
-	$('<img/>', {
-	    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=Q|2&chl='+enc_url,
-	    alt: 'QR Code',
-	}).appendTo('.qrcode');
+	jqxhr.done( function(data, textStatus, jqXHR) { 
+		// set URL for user
+		$('.url').text(data.id);
+
+		// generate QR Code
+		// https://developers.google.com/chart/infographics/docs/qr_codes
+		$('<img/>', {
+		    src: 'https://chart.googleapis.com/chart?&cht=qr&chs=250x250&chld=Q|2&chl='+data.id,
+		    alt: 'QR Code',
+		}).appendTo('.qrcode');
+	});
+
+    jqxhr.fail( function(jqXHR, textStatus, errorThrown) { alert("error loading url from goo.gl"); })
 
 	// --- google charts part
 
@@ -58,7 +67,7 @@
 	    ['Ei', obj.n]
 	  ]);
 
-	  var options = { colors:['green','red'], width: 340, height: 340, legend: { position: 'none' } };
+	  var options = { colors:['green','red'], width: 340, height: 400, legend: { position: 'top' } };
 
 	  var chart = new google.visualization.PieChart(document.getElementById('q-'+obj.id));
 	  chart.draw(data, options);
