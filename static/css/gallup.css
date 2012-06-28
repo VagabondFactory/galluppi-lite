@@ -9,3 +9,10 @@ h2 { color:#0E246B; }
 .question-unit input[type="text"] { padding: 9px 9px;width:100%;box-sizing:border-box;height:37px; }
 .question-unit .btn { float:none;margin-left:0;width:100%; }
 .answer-unit .btn { float:none;display:inline-block;width:45%; }
+
+@media (min-width: 940px) {
+  body {
+		padding-top: 60px;
+  		padding-bottom: 40px;
+  }
+}
